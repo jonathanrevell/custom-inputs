@@ -1,0 +1,35 @@
+/* line 1, ../sass/_dropdown.scss */
+*[cx-dropdown] {
+  position: relative;
+}
+
+/* line 5, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]) {
+  display: inline-block;
+}
+/* line 8, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]) ul, *[cx-dropdown]:not([open]) ol {
+  display: none;
+}
+
+/* line 15, ../sass/_dropdown.scss */
+*[cx-dropdown][open] ul, *[cx-dropdown][open] ol {
+  position: absolute;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+}
+/* line 23, ../sass/_dropdown.scss */
+*[cx-dropdown][open] ul li:hover, *[cx-dropdown][open] ol li:hover {
+  background-color: lightblue;
+}
+/* line 28, ../sass/_dropdown.scss */
+*[cx-dropdown][open] ul li[selected], *[cx-dropdown][open] ol li[selected] {
+  background-color: lightblue;
+}
+/* line 30, ../sass/_dropdown.scss */
+*[cx-dropdown][open] ul li[selected]:hover, *[cx-dropdown][open] ol li[selected]:hover {
+  background-color: #5fb3ce;
+}

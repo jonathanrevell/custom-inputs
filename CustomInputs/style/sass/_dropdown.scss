@@ -1,0 +1,35 @@
+*[cx-dropdown] {
+  position:relative;
+}
+
+*[cx-dropdown]:not([open]) {
+  display:inline-block;
+
+  ul, ol {
+    display: none;
+  }
+
+}
+
+*[cx-dropdown][open] {
+  ul, ol {
+    position:absolute;
+    display:inline-block;
+    margin:0;
+    padding:0;
+    left:0;
+    top:0;
+
+    li:hover {
+      background-color:lightblue;
+    }
+    li:not([selected]) {
+    }
+    li[selected] {
+      background-color:lightblue;
+      &:hover {
+        background-color:darken(lightblue,20%);
+      }
+    }
+  }
+}
