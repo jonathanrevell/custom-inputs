@@ -41,6 +41,19 @@
         this.buildChoicesFromDOM();
       }
       this.assignIDs();
+      this.computeWidth();
+    },
+    computeWidth: function() {
+      var listWidth     = this.$list.outerWidth(),
+          displayWidth  = this.$display.outerWidth();
+
+      if(listWidth < displayWidth) {
+        // this.$list.css('min-width', displayWidth);
+        this.$list.width(displayWidth);
+      } else {
+        // this.$display.css('min-width', listWidth);
+        this.$display.width(listWidth);
+      }
     },
     buildChoicesFromDOM: function() {
       this.choices = _.map( this.$choices, function(option) {
