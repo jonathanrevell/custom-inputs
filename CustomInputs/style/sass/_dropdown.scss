@@ -1,17 +1,48 @@
-*[cx-dropdown] {
+$dd-item-padding: 5px;
+
+*[cx-dropdown], *[cx-dropdown][open] {
   position:relative;
-}
-
-*[cx-dropdown]:not([open]) {
+  padding-right:20px;
   display:inline-block;
+  cursor:pointer;
+  @include transition(background-color 0.5s);
 
-  ul, ol {
-    display: none;
+  &>*:first-child {
+    padding:$dd-item-padding;
+    display:inline-block;
   }
 
+  &:not([open]) {
+    display:inline-block;
+
+    ul, ol {
+      display: none;
+    }
+  }
+  &:hover {
+    background-color:lightblue;
+  }
+}
+
+
+
+*[cx-dropdown] {
+  &:not([open]):after {
+    @include arrow-down(4px, black);
+  }
+  &[open]:after {
+    @include arrow-up(4px, black);
+  }
+  &:not([open]):after, &[open]:after {
+    position:absolute;
+    top:50%;
+    right:5px;
+    @include transform( translateY(-50%) );
+  }
 }
 
 *[cx-dropdown][open] {
+
   ul, ol {
     position:absolute;
     display:inline-block;
@@ -19,6 +50,14 @@
     padding:0;
     left:0;
     top:0;
+    background-color:white;
+    list-style:none;
+    border:solid 2px lightgray;
+    border-radius:1px;
+
+    li {
+      padding:$dd-item-padding;
+    }
 
     li:hover {
       background-color:lightblue;

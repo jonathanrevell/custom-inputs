@@ -1,18 +1,64 @@
-/* line 1, ../sass/_dropdown.scss */
-*[cx-dropdown] {
+/* line 3, ../sass/_dropdown.scss */
+*[cx-dropdown], *[cx-dropdown][open] {
   position: relative;
+  padding-right: 20px;
+  display: inline-block;
+  cursor: pointer;
+  -moz-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
 }
-
-/* line 5, ../sass/_dropdown.scss */
-*[cx-dropdown]:not([open]) {
+/* line 10, ../sass/_dropdown.scss */
+*[cx-dropdown] > *:first-child, *[cx-dropdown][open] > *:first-child {
+  padding: 5px;
   display: inline-block;
 }
-/* line 8, ../sass/_dropdown.scss */
-*[cx-dropdown]:not([open]) ul, *[cx-dropdown]:not([open]) ol {
+/* line 15, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]), *[cx-dropdown][open]:not([open]) {
+  display: inline-block;
+}
+/* line 18, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]) ul, *[cx-dropdown]:not([open]) ol, *[cx-dropdown][open]:not([open]) ul, *[cx-dropdown][open]:not([open]) ol {
   display: none;
 }
+/* line 22, ../sass/_dropdown.scss */
+*[cx-dropdown]:hover, *[cx-dropdown][open]:hover {
+  background-color: lightblue;
+}
 
-/* line 15, ../sass/_dropdown.scss */
+/* line 30, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]):after {
+  width: 0;
+  height: 0;
+  content: ' ';
+  display: block;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid black;
+}
+/* line 33, ../sass/_dropdown.scss */
+*[cx-dropdown][open]:after {
+  width: 0;
+  height: 0;
+  content: ' ';
+  display: block;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid black;
+}
+/* line 36, ../sass/_dropdown.scss */
+*[cx-dropdown]:not([open]):after, *[cx-dropdown][open]:after {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+/* line 46, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul, *[cx-dropdown][open] ol {
   position: absolute;
   display: inline-block;
@@ -20,16 +66,24 @@
   padding: 0;
   left: 0;
   top: 0;
+  background-color: white;
+  list-style: none;
+  border: solid 2px lightgray;
+  border-radius: 1px;
 }
-/* line 23, ../sass/_dropdown.scss */
+/* line 58, ../sass/_dropdown.scss */
+*[cx-dropdown][open] ul li, *[cx-dropdown][open] ol li {
+  padding: 5px;
+}
+/* line 62, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li:hover, *[cx-dropdown][open] ol li:hover {
   background-color: lightblue;
 }
-/* line 28, ../sass/_dropdown.scss */
+/* line 67, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li[selected], *[cx-dropdown][open] ol li[selected] {
   background-color: lightblue;
 }
-/* line 30, ../sass/_dropdown.scss */
+/* line 69, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li[selected]:hover, *[cx-dropdown][open] ol li[selected]:hover {
   background-color: #5fb3ce;
 }

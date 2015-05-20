@@ -1,1 +1,48 @@
+@import "compass/css3/transform";
+@import "compass/css3/transition";
+
+@mixin arrow-up($side-length, $color) {
+	width: 0;
+	height: 0;
+  content: ' ';
+  display: block;
+	border-left: $side-length solid transparent;
+	border-right: $side-length solid transparent;
+
+	border-bottom: $side-length solid $color;
+}
+
+@mixin arrow-down($side-length, $color) {
+	width: 0;
+	height: 0;
+  content: ' ';
+  display: block;
+	border-left: $side-length solid transparent;
+	border-right: $side-length solid transparent;
+
+	border-top: $side-length solid $color;
+}
+
+@mixin arrow-right($side-length, $color) {
+	width: 0;
+	height: 0;
+  content: ' ';
+  display: block;
+	border-top: $side-length solid transparent;
+	border-bottom: $side-length solid transparent;
+
+	border-left: $side-length solid $color;
+}
+
+@mixin arrow-left($side-length, $color) {
+	width: 0;
+	height: 0;
+  content: ' ';
+  display: block;
+	border-top: $side-length solid transparent;
+	border-bottom: $side-length solid transparent;
+
+	border-right:$side-length solid $color;
+}
+
 @import 'dropdown.scss';
