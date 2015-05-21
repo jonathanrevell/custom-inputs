@@ -80,22 +80,40 @@
   border: solid 1px gray;
   border-radius: 1px;
   min-width: 100px;
+  max-height: 180px;
+  overflow-y: auto;
 }
-/* line 79, ../sass/_dropdown.scss */
+/* line 81, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li, *[cx-dropdown][open] ol li {
   padding: 5px;
   padding-right: 40px;
   min-width: 100px;
 }
-/* line 85, ../sass/_dropdown.scss */
+/* line 87, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li.highlighted, *[cx-dropdown][open] ol li.highlighted {
   background-color: lightblue;
 }
-/* line 90, ../sass/_dropdown.scss */
+/* line 92, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li[selected], *[cx-dropdown][open] ol li[selected] {
   background-color: lightblue;
 }
-/* line 92, ../sass/_dropdown.scss */
+/* line 94, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul li[selected]:hover, *[cx-dropdown][open] ul li[selected].highlighted, *[cx-dropdown][open] ol li[selected]:hover, *[cx-dropdown][open] ol li[selected].highlighted {
   background-color: #5fb3ce;
+}
+
+@media (max-width: 767px) {
+  /* line 104, ../sass/_dropdown.scss */
+  *[cx-dropdown][open].cx-mobile-panel ul, *[cx-dropdown][open].cx-mobile-panel ol {
+    position: fixed !important;
+    width: 100% !important;
+    bottom: 0;
+    top: auto !important;
+    max-height: 40vh;
+  }
+  /* line 111, ../sass/_dropdown.scss */
+  *[cx-dropdown][open].cx-mobile-panel ul li, *[cx-dropdown][open].cx-mobile-panel ol li {
+    font-size: 16px;
+    padding: 7.5px;
+  }
 }

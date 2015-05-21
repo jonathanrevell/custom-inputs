@@ -8,10 +8,13 @@
     this._selectedIndex     = 0;
     this._highlightedIndex  = 0;
     this._open              = false;
-    this.choices            = options.choices || [];
+    this.choices            = options.choices   || [];
 
     // positions: below, over, aligned
-    this._position      = options.position || 'below';
+    this._position        = options.position    || 'below';
+
+    // mobileStyle: none, panel
+    this._mobileStyle     = options.mobileStyle || 'panel';
 
     this.initialize( options );
   };
@@ -82,11 +85,11 @@
       this.open = false;
     },
     handleKeyAlphaNumeric: function( ev ) {
-      var char = String.fromCharCode(ev.keyCode),
+      var char = String.fromCharCode(ev.keyCode).toLowerCase(),
           index = -1;
 
       index = _.findIndex( this.choices, function( choice ){
-        return char == choice[0];
+        return char == choice[0].toLowerCase();
       });
 
       if(index > -1) {
@@ -108,9 +111,21 @@
       this.open = false;
     },
     setHighlightedItem: function( index ) {
-      this._highlightedIndex = index;
+      this._highlightedIndex = this.conformIndexToListBounds( index );
       this.$choices.removeClass('highlighted');
-      $(this.$choices[index]).addClass('highlighted');
+
+      var $highlighted = $(this.$choices[index]);
+      $highlighted.addClass('highlighted');
+      this.$list.scrollTop( $highlighted.position().top );
+    },
+    conformIndexToListBounds: function( index ) {
+       if(index >= this.$choices.length) {
+         index = this.$choices.length - 1;
+       }
+       if(index < 0) {
+         index = 0;
+       }
+       return index;
     },
     setupDOM: function(options)  {
       this.$display     = this.$el.find('>:first-child');
@@ -176,6 +191,14 @@
       this.$choices.attr('selected',false);
       $(this.$choices[idx]).attr('selected',true);
     },
+    layoutDropdown: function() {
+      if( this._mobileStyle === "panel") {
+        this.$el.addClass('cx-mobile-panel');
+      } else {
+        this.$el.removeClass('cx-mobile-panel');
+      }
+      this.positionDropdown();
+    },
     positionDropdown: function() {
       // positions: below, over, aligned
       var baseHeight      = this.$el.outerHeight(),
@@ -222,7 +245,7 @@
       this._open = val;
       if(val) {
         this.$el.trigger('focus');
-        this.positionDropdown();
+        this.layoutDropdown();
         this.setHighlightedItem( this._selectedIndex );
       }
     },
