@@ -4,10 +4,11 @@
     options       = options || {};
     this.$el      = $(el);
 
-    this._value         = null;
-    this._selectedIndex = 0;
-    this._open          = false;
-    this.choices        = options.choices || [];
+    this._value             = null;
+    this._selectedIndex     = 0;
+    this._highlightedIndex  = 0;
+    this._open              = false;
+    this.choices            = options.choices || [];
 
     // positions: below, over, aligned
     this._position      = options.position || 'below';
@@ -32,9 +33,84 @@
       this.$choices.click( function(ev) {
         _this.onClickOption(ev.target);
       });
+      this.$choices.on('mouseenter', function(ev) {
+        var index = $(ev.target).attr('choice-id');
+        _this.setHighlightedItem( index );
+      });
       this.$el.blur(function(ev) {
         _this.open = false;
       });
+      this.$el.on('keydown', function(ev) {
+        _this.keyHandler( ev );
+      });
+    },
+    keyHandler: function( ev ) {
+      if(!this.open && (ev.which == 38 || ev.which == 40)) {
+        this.open = true;
+      } else {
+        switch(ev.which) {
+          case 38:    //38: Up Arrow
+            this.handleKeyUpArrow( ev );
+            break;
+          case 40:    //40: Down Arrow
+            this.handleKeyDownArrow( ev );
+            break;
+          case 13:    //13: Enter
+          case 32:    //32: Space
+            if(open) this.handleKeyConfirm( ev );
+            break;
+          case 27:    //27: Escape
+            this.handleKeyCancel( ev );
+            break;
+          default:
+            if(ev.which >= 48 && ev.which <= 90) {
+              this.handleKeyAlphaNumeric( ev );     //Handle numbers and letters
+            }
+        }
+      }
+    },
+    handleKeyUpArrow: function( ev ) {
+      this.decrementHighlightedItem();
+    },
+    handleKeyDownArrow: function( ev ) {
+      this.incrementHighlightedItem();
+    },
+    handleKeyConfirm: function( ev ) {
+      this.selectHighlightedItem();
+    },
+    handleKeyCancel: function( ev ) {
+      this.open = false;
+    },
+    handleKeyAlphaNumeric: function( ev ) {
+      var char = String.fromCharCode(ev.keyCode),
+          index = -1;
+
+      index = _.findIndex( this.choices, function( choice ){
+        return char == choice[0];
+      });
+
+      if(index > -1) {
+        this.setHighlightedItem( index );
+      }
+    },
+    incrementHighlightedItem: function() {
+      if(this._highlightedIndex < this.choices.length - 1) {
+        this.setHighlightedItem( this._highlightedIndex + 1 );
+      }
+    },
+    decrementHighlightedItem: function() {
+      if(this._highlightedIndex > 0) {
+        this.setHighlightedItem( this._highlightedIndex - 1 );
+      }
+    },
+    selectHighlightedItem: function() {
+      this.setSelectedIndex( this._highlightedIndex );
+      this.open = false;
+    },
+    setHighlightedItem: function( index ) {
+      this._highlightedIndex = index;
+      this.$choices.removeClass('highlighted');
+      $(this.$choices[index]).addClass('highlighted');
     },
     setupDOM: function(options)  {
       this.$display     = this.$el.find('>:first-child');
@@ -95,6 +171,7 @@
       var val = this.choices[idx];
 
       this._selectedIndex = idx;
+      this._value         = this.choices[idx];
       this.$display.text( val );
       this.$choices.attr('selected',false);
       $(this.$choices[idx]).attr('selected',true);
@@ -146,6 +223,7 @@
       if(val) {
         this.$el.trigger('focus');
         this.positionDropdown();
+        this.setHighlightedItem( this._selectedIndex );
       }
     },
     get open() {

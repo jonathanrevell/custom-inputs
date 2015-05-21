@@ -88,7 +88,7 @@
   min-width: 100px;
 }
 /* line 85, ../sass/_dropdown.scss */
-*[cx-dropdown][open] ul li:hover, *[cx-dropdown][open] ol li:hover {
+*[cx-dropdown][open] ul li.highlighted, *[cx-dropdown][open] ol li.highlighted {
   background-color: lightblue;
 }
 /* line 90, ../sass/_dropdown.scss */
@@ -96,6 +96,6 @@
   background-color: lightblue;
 }
 /* line 92, ../sass/_dropdown.scss */
-*[cx-dropdown][open] ul li[selected]:hover, *[cx-dropdown][open] ol li[selected]:hover {
+*[cx-dropdown][open] ul li[selected]:hover, *[cx-dropdown][open] ul li[selected].highlighted, *[cx-dropdown][open] ol li[selected]:hover, *[cx-dropdown][open] ol li[selected].highlighted {
   background-color: #5fb3ce;
 }

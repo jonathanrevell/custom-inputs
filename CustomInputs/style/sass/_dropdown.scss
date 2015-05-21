@@ -82,14 +82,14 @@ $dd-min-width:      100px;
       min-width:$dd-min-width;
     }
 
-    li:hover {
+    li.highlighted {
       background-color:lightblue;
     }
     li:not([selected]) {
     }
     li[selected] {
       background-color:lightblue;
-      &:hover {
+      &:hover, &.highlighted {
         background-color:darken(lightblue,20%);
       }
     }
