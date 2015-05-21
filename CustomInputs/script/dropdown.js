@@ -22,16 +22,24 @@
       var _this = this;
 
       this.setupDOM( options );
+      this.bindEvents();
+    },
+    bindEvents: function() {
+      var _this = this;
       this.$display.click( function(ev) {
         _this.onClick();
       });
       this.$choices.click( function(ev) {
         _this.onClickOption(ev.target);
       });
+      this.$el.blur(function(ev) {
+        _this.open = false;
+      });
     },
     setupDOM: function(options)  {
       this.$display     = this.$el.find('>:first-child');
       this.$list        = this.$el.find('ul');
+
       if(this.$list.length === 0) {
         this.$list = this.$el.find('ol');
       }
@@ -40,8 +48,13 @@
       if( !options.choices ) {
         this.buildChoicesFromDOM();
       }
+
+      this.makeFocusable();
       this.assignIDs();
       this.computeWidth();
+    },
+    makeFocusable: function() {
+      this.$el.attr('tabindex','0');
     },
     computeWidth: function() {
       var listWidth     = this.$list.outerWidth(),
@@ -131,6 +144,7 @@
       this.$el.attr('open', val);
       this._open = val;
       if(val) {
+        this.$el.trigger('focus');
         this.positionDropdown();
       }
     },
