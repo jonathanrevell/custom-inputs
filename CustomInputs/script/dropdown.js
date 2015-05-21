@@ -257,11 +257,17 @@
     }
   };
 
-  $(document).ready(function() {
+  Dropdown.initAll = function() {
     var elements = $('[cx-dropdown]');
     _.each(elements, function( el ) {
       var dropdown = new Dropdown(el);
     });
+  };
+
+  exports.Dropdown = Dropdown;
+
+  $(document).ready(function() {
+    Dropdown.initAll();
   });
 
 })(window);
