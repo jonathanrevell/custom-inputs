@@ -38,7 +38,7 @@
       });
       this.$choices.on('mouseenter', function(ev) {
         var index = $(ev.target).attr('choice-id');
-        _this.setHighlightedItem( index );
+        _this.setHighlightedItem( index, true );
       });
       this.$el.blur(function(ev) {
         _this.open = false;
@@ -110,13 +110,16 @@
       this.setSelectedIndex( this._highlightedIndex );
       this.open = false;
     },
-    setHighlightedItem: function( index ) {
+    setHighlightedItem: function( index, isMouseTriggered ) {
       this._highlightedIndex = this.conformIndexToListBounds( index );
       this.$choices.removeClass('highlighted');
 
       var $highlighted = $(this.$choices[index]);
       $highlighted.addClass('highlighted');
-      this.$list.scrollTop( $highlighted.position().top );
+
+      if(!isMouseTriggered) {
+        this.$list.scrollTop( $highlighted.position().top );
+      }
     },
     conformIndexToListBounds: function( index ) {
        if(index >= this.$choices.length) {
