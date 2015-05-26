@@ -85,6 +85,10 @@ $dd-min-width:      100px;
       min-width:$dd-min-width;
     }
 
+    li i + * {
+      margin-left:10px;
+    }
+
     li.highlighted {
       background-color:lightblue;
     }

@@ -71,6 +71,7 @@
             }
         }
       }
+      ev.stopPropagation();
     },
     handleKeyUpArrow: function( ev ) {
       this.decrementHighlightedItem();
