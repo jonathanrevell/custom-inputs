@@ -10,12 +10,18 @@
     this._open              = false;
     this.choices            = options.choices   || [];
 
+    // isMenu: true / false
+    var hasMenuAttr       = (this.$el.attr('cx-menu') !== undefined) ? true : false;
+    this._isMenu          = options.isMenu || hasMenuAttr || false;
+
     // positions: below, over, aligned
     this._position        = options.position    || 'below';
 
     // mobileStyle: none, panel
     this._mobileStyle     = options.mobileStyle || 'panel';
 
+
+    // Perform the initialization tasks
     this.initialize( options );
   };
 
@@ -189,11 +195,16 @@
     setSelectedIndex: function( idx ) {
       var val = this.choices[idx];
 
-      this._selectedIndex = idx;
-      this._value         = this.choices[idx];
-      this.$display.text( val );
-      this.$choices.attr('selected',false);
-      $(this.$choices[idx]).attr('selected',true);
+      if(this._isMenu) {
+        console.log("Menu item clicked");
+
+      } else {
+        this._selectedIndex = idx;
+        this._value         = this.choices[idx];
+        this.$display.text( val );
+        this.$choices.attr('selected',false);
+        $(this.$choices[idx]).attr('selected',true);
+      }
     },
     layoutDropdown: function() {
       if( this._mobileStyle === "panel") {

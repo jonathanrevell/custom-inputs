@@ -3,25 +3,24 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
-  z-index: 100;
 }
-/* line 17, ../sass/_dropdown.scss */
+/* line 16, ../sass/_dropdown.scss */
 *[cx-dropdown]:not([open]), *[cx-dropdown][open]:not([open]) {
   display: inline-block;
 }
-/* line 20, ../sass/_dropdown.scss */
+/* line 19, ../sass/_dropdown.scss */
 *[cx-dropdown]:not([open]) ul, *[cx-dropdown]:not([open]) ol, *[cx-dropdown][open]:not([open]) ul, *[cx-dropdown][open]:not([open]) ol {
   display: none;
 }
 
-/* line 29, ../sass/_dropdown.scss */
+/* line 28, ../sass/_dropdown.scss */
 *[cx-dropdown] > *:first-child {
   -moz-transition: background-color 0.4s;
   -o-transition: background-color 0.4s;
   -webkit-transition: background-color 0.4s;
   transition: background-color 0.4s;
 }
-/* line 32, ../sass/_dropdown.scss */
+/* line 31, ../sass/_dropdown.scss */
 *[cx-dropdown]:not([open]) > *:first-child:after {
   width: 0;
   height: 0;
@@ -38,7 +37,7 @@
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-/* line 39, ../sass/_dropdown.scss */
+/* line 38, ../sass/_dropdown.scss */
 *[cx-dropdown][open] > *:first-child:after {
   width: 0;
   height: 0;
@@ -56,18 +55,22 @@
   transform: translateY(-50%);
 }
 
-/* line 51, ../sass/_dropdown.scss */
+/* line 50, ../sass/_dropdown.scss */
 *[cx-dropdown] > *:first-child {
   padding: 5px;
   padding-right: 40px;
   min-width: 100px;
   display: inline-block;
 }
-/* line 57, ../sass/_dropdown.scss */
+/* line 56, ../sass/_dropdown.scss */
 *[cx-dropdown] > *:first-child:hover {
   background-color: lightblue;
 }
 
+/* line 64, ../sass/_dropdown.scss */
+*[cx-dropdown][open] {
+  z-index: 100;
+}
 /* line 67, ../sass/_dropdown.scss */
 *[cx-dropdown][open] ul, *[cx-dropdown][open] ol {
   position: absolute;
