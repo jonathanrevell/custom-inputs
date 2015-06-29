@@ -121,7 +121,7 @@
       this._highlightedIndex = this.conformIndexToListBounds( index );
       this.$choices.removeClass('highlighted');
 
-      var $highlighted = $(this.$choices[index]);
+      var $highlighted = $(this.$choices[this._highlightedIndex]);
       $highlighted.addClass('highlighted');
 
       if(!isMouseTriggered) {
@@ -129,6 +129,9 @@
       }
     },
     conformIndexToListBounds: function( index ) {
+      if(_.isUndefined(index)) {
+        index = 0;
+      }
        if(index >= this.$choices.length) {
          index = this.$choices.length - 1;
        }
