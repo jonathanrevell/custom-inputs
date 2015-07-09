@@ -20,6 +20,15 @@
     // mobileStyle: none, panel
     this._mobileStyle     = options.mobileStyle || 'panel';
 
+    // Click Handler
+    var onSelectAttr;
+    if (this.$el.attr('on-select') !== undefined) {
+      onSelectAttr = function() {
+        return eval( this.$el.attr('on-select'));
+      };
+    }
+    this._onSelectEvent    = options.onSelect || onSelectAttr || null;
+
 
     // Perform the initialization tasks
     this.initialize( options );
@@ -200,6 +209,13 @@
 
       if(this._isMenu) {
         console.log("Menu item clicked");
+        if(this._onSelectEvent) {
+          this._onSelectEvent({
+            index:    idx,
+            value:    val,
+            dropdown: this
+          });
+        }
 
       } else {
         this._selectedIndex = idx;

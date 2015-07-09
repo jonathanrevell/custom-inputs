@@ -24,7 +24,7 @@ $dd-min-width:      100px;
 
 
 // Arrow styling
-*[cx-dropdown] {
+*[cx-dropdown]:not(.hide-arrow) {
   &>*:first-child {
     @include transition(background-color 0.4s);
   }

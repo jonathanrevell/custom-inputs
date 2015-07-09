@@ -10,8 +10,27 @@
     <section>
       <h2>Dropdowns</h2>
       <article>
-        <h3>Dropdown</h3>
+        <h3>Custom Dropdown</h3>
         <div cx-dropdown>
+          <span>Custom Default</span>
+          <ul>
+            <li>Apple</li>
+            <li selected>Option 1</li>
+            <li>Option 2</li>
+            <li>Apricot</li>
+            <li>Option 3</li>
+            <li>Option 4</li>
+            <li>Option 5</li>
+            <li>Option 6</li>
+            <li>Option 7</li>
+            <li>Option 8</li>
+            <li>Phones</li>
+          </ul>
+        </div>
+      </article>
+      <article>
+        <h3>Custom Menu</h3>
+        <div cx-dropdown cx-menu on-select="console.log('hello selection');">
           <span>Custom Default</span>
           <ul>
             <li>Apple</li>
