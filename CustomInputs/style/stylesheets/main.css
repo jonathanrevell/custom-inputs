@@ -56,14 +56,14 @@
 }
 
 /* line 50, ../sass/_dropdown.scss */
-*[cx-dropdown] > *:first-child {
+*[cx-dropdown]:not([cx-menu]) > *:first-child {
   padding: 5px;
   padding-right: 40px;
   min-width: 100px;
   display: inline-block;
 }
 /* line 56, ../sass/_dropdown.scss */
-*[cx-dropdown] > *:first-child:hover {
+*[cx-dropdown]:not([cx-menu]) > *:first-child:hover {
   background-color: lightblue;
 }
 

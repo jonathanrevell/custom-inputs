@@ -47,7 +47,7 @@ $dd-min-width:      100px;
 
 
 // Styling for the "base"
-*[cx-dropdown]>*:first-child {
+*[cx-dropdown]:not([cx-menu])>*:first-child {
   padding:$dd-item-padding;
   padding-right:$dd-arrow-padding;
   min-width:$dd-min-width;

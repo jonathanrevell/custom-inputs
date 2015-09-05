@@ -20,6 +20,12 @@
     // mobileStyle: none, panel
     this._mobileStyle     = options.mobileStyle || 'panel';
 
+    // openOnHover: true / false
+    this._openOnHover     = options.openOnHover || false;
+    if(this.$el.attr('open-on-hover') !== undefined) {
+      this._openOnHover = true;
+    }
+
     // Click Handler
     var onSelectAttr;
     if (this.$el.attr('on-select') !== undefined) {
@@ -46,9 +52,11 @@
     bindEvents: function() {
       var _this = this;
       this.$display.click( function(ev) {
+        ev.stopPropagation();
         _this.onClick();
       });
       this.$choices.click( function(ev) {
+        ev.stopPropagation();
         _this.onClickOption(ev.target);
       });
       this.$choices.on('mouseenter', function(ev) {
@@ -61,6 +69,25 @@
       this.$el.on('keydown', function(ev) {
         _this.keyHandler( ev );
       });
+
+      if(this._openOnHover) {
+        var hoverOpenTimeout = null;
+
+        this.$el.on('mouseenter', function(ev) {
+          if(!hoverOpenTimeout) {
+            hoverOpenTimeout = setTimeout(function() {
+              _this.open = true;
+            }, 100);
+          }
+        });
+        this.$el.on('mouseleave', function(ev) {
+          if(hoverOpenTimeout) {
+            clearTimeout(hoverOpenTimeout);
+            hoverOpenTimeout = null;
+          }
+          _this.open = false;
+        })
+      }
     },
     keyHandler: function( ev ) {
       if(!this.open && (ev.which == 38 || ev.which == 40)) {
