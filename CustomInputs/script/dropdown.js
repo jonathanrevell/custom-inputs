@@ -26,6 +26,11 @@
       this._openOnHover = true;
     }
 
+    this._ignoreWidth     = options.ignoreWidth || false;
+    if(this.$el.attr('ignore-width') !== undefined) {
+      this._ignoreWidth = true;
+    }
+
     // Click Handler
     var onSelectAttr;
     if (this.$el.attr('on-select') !== undefined) {
@@ -46,22 +51,14 @@
     initialize: function( options ) {
       var _this = this;
 
-      this.setupDOM( options );
-      this.bindEvents();
+      this.setupBaseDOM( options );
+      this.bindBaseEvents();
     },
-    bindEvents: function() {
+    bindBaseEvents: function() {
       var _this = this;
       this.$display.click( function(ev) {
         ev.stopPropagation();
         _this.onClick();
-      });
-      this.$choices.click( function(ev) {
-        ev.stopPropagation();
-        _this.onClickOption(ev.target);
-      });
-      this.$choices.on('mouseenter', function(ev) {
-        var index = $(ev.target).attr('choice-id');
-        _this.setHighlightedItem( index, true );
       });
       this.$el.blur(function(ev) {
         _this.open = false;
@@ -69,7 +66,6 @@
       this.$el.on('keydown', function(ev) {
         _this.keyHandler( ev );
       });
-
       if(this._openOnHover) {
         var hoverOpenTimeout = null;
 
@@ -86,8 +82,19 @@
             hoverOpenTimeout = null;
           }
           _this.open = false;
-        })
+        });
       }
+    },
+    bindListEvents: function() {
+      var _this = this;
+      this.$choices.click( function(ev) {
+        ev.stopPropagation();
+        _this.onClickOption(ev.target);
+      });
+      this.$choices.on('mouseenter', function(ev) {
+        var index = $(ev.target).attr('choice-id');
+        _this.setHighlightedItem( index, true );
+      });
     },
     keyHandler: function( ev ) {
       if(!this.open && (ev.which == 38 || ev.which == 40)) {
@@ -176,8 +183,11 @@
        }
        return index;
     },
-    setupDOM: function(options)  {
+    setupBaseDOM: function(options) {
       this.$display     = this.$el.find('>:first-child');
+      this.makeFocusable();
+    },
+    setupListDOM: function(options)  {
       this.$list        = this.$el.find('ul');
 
       if(this.$list.length === 0) {
@@ -185,13 +195,14 @@
       }
       this.$choices     = this.$el.find('li');
 
-      if( !options.choices ) {
+      if( !this.choices || this.choices.length == 0 ) {
         this.buildChoicesFromDOM();
       }
 
-      this.makeFocusable();
       this.assignIDs();
-      this.computeWidth();
+      if(!this._ignoreWidth) {
+        this.computeWidth();
+      }
     },
     makeFocusable: function() {
       this.$el.attr('tabindex','0');
@@ -221,9 +232,9 @@
         counter++;
       });
     },
-    onClick: function() {
+    onClick: _.throttle(function() {
       this.open = !this.open;
-    },
+    }, 100),
     onClickOption: function( option ) {
       var $option = $(option),
           idx     = $option.attr('choice-id');
@@ -253,6 +264,11 @@
       }
     },
     layoutDropdown: function() {
+      if(!this.$list) {
+        this.setupListDOM();
+        this.bindListEvents();
+      }
+
       if( this._mobileStyle === "panel") {
         this.$el.addClass('cx-mobile-panel');
       } else {
