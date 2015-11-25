@@ -2,8 +2,10 @@ $dd-item-padding:   5px;
 $dd-arrow-padding:  40px;
 $dd-min-width:      100px;
 
+$dropdown-selector: '*[cx-dropdown], .cx-dropdown';
+
 // General styling
-*[cx-dropdown], *[cx-dropdown][open] {
+#{$dropdown-selector}, #{$dropdown-selector}[open] {
   position:relative;
   display:inline-block;
   cursor:pointer;
@@ -24,7 +26,7 @@ $dd-min-width:      100px;
 
 
 // Arrow styling
-*[cx-dropdown]:not(.hide-arrow) {
+#{$dropdown-selector}:not(.hide-arrow) {
   &>*:first-child {
     @include transition(background-color 0.4s);
   }
@@ -47,7 +49,7 @@ $dd-min-width:      100px;
 
 
 // Styling for the "base"
-*[cx-dropdown]:not([cx-menu])>*:first-child {
+#{$dropdown-selector}:not([cx-menu])>*:first-child {
   padding:$dd-item-padding;
   padding-right:$dd-arrow-padding;
   min-width:$dd-min-width;
@@ -61,7 +63,7 @@ $dd-min-width:      100px;
 
 
 // Styling for the open state
-*[cx-dropdown][open] {
+#{$dropdown-selector}[open] {
   z-index:100;
 
   ul, ol {
@@ -104,7 +106,7 @@ $dd-min-width:      100px;
 }
 
 @media (max-width:767px) {
-  *[cx-dropdown][open].cx-mobile-panel {
+  #{$dropdown-selector}[open].cx-mobile-panel {
 
     ul, ol {
       position:fixed!important;

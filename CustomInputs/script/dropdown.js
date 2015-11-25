@@ -188,42 +188,57 @@
       this.makeFocusable();
     },
     setupListDOM: function(options)  {
-      this.$list        = this.$el.find('ul');
+  this.$list        = this.$el.find('ul');
 
-      if(this.$list.length === 0) {
-        this.$list = this.$el.find('ol');
-      }
-      this.$choices     = this.$el.find('li');
+  if(this.$list.length === 0) {
+    this.$list = this.$el.find('ol');
+  }
+  if(this.$list.length === 0) {
+    this.$list = $(document.createElement('ul'));
+    this.$el.append(this.$list);
 
-      if( !this.choices || this.choices.length == 0 ) {
-        this.buildChoicesFromDOM();
-      }
+  }
+  this.$choices     = this.$el.find('li');
 
-      this.assignIDs();
-      if(!this._ignoreWidth) {
-        this.computeWidth();
-      }
-    },
-    makeFocusable: function() {
-      this.$el.attr('tabindex','0');
-    },
-    computeWidth: function() {
-      var listWidth     = this.$list.outerWidth(),
-          displayWidth  = this.$display.outerWidth();
+  if( !this.choices || this.choices.length === 0 ) {
+    this.buildChoicesFromDOM();
+  } else if( this.choices && this.choices.length > 0) {
+    this.buildChoicesFromModel();
+  }
 
-      if(listWidth < displayWidth) {
-        // this.$list.css('min-width', displayWidth);
-        this.$list.width(displayWidth);
-      } else {
-        // this.$display.css('min-width', listWidth);
-        this.$display.width(listWidth);
-      }
-    },
-    buildChoicesFromDOM: function() {
-      this.choices = _.map( this.$choices, function(option) {
-        return $(option).text();
-      });
-    },
+  this.assignIDs();
+  if(!this._ignoreWidth) {
+    this.computeWidth();
+  }
+},
+makeFocusable: function() {
+  this.$el.attr('tabindex','0');
+},
+computeWidth: function() {
+  var listWidth     = this.$list.outerWidth(),
+      displayWidth  = this.$display.outerWidth();
+
+  if(listWidth < displayWidth) {
+    // this.$list.css('min-width', displayWidth);
+    this.$list.width(displayWidth);
+  } else {
+    // this.$display.css('min-width', listWidth);
+    this.$display.width(listWidth);
+  }
+},
+buildChoicesFromDOM: function() {
+  this.choices = _.map( this.$choices, function(option) {
+    return $(option).text();
+  });
+},
+buildChoicesFromModel: function( ) {
+  this.$list.empty();
+  var mapped = _.map(this.choices, function( choice ) {
+    return "<li>" + choice.toString() + "</li>";
+  });
+  this.$list.html( mapped.join('') );
+  this.$choices     = this.$el.find('li');
+},
     assignIDs: function() {
       var counter = 0;
       this.$choices.attr('choice-id','');
@@ -278,11 +293,15 @@
     },
     positionDropdown: function() {
       // positions: below, over, aligned
-      var baseHeight      = this.$el.outerHeight(),
-          baseOffset      = this.$el.offset(),
+      var baseHeight      = this.$display.outerHeight(),
+          baseOffset      = this.$display.offset(),
           listOffset      = this.$list.offset(),
+          listWidth       = this.$list.width(),
           listItemHeight  = $(this.$choices[0]).outerHeight(),
           top, left;
+
+      var windowWidth     = $(window).width(),
+          windowHeight    = $(window).height();
 
       switch(this._position) {
         case "below":
@@ -296,9 +315,16 @@
           break;
       }
 
+      var horizontalExtent = listOffset.left + listWidth;
+      var leftAdjustment = 0;
+      if(horizontalExtent > windowWidth) {
+        leftAdjustment = horizontalExtent - windowWidth + 10;
+      }
+      left = listOffset.left - leftAdjustment;
+
       this.$list.offset({
         top:  top,
-        left: listOffset.left
+        left: left
       });
     },
     get value() {
