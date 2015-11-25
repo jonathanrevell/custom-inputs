@@ -20,6 +20,9 @@
     // mobileStyle: none, panel
     this._mobileStyle     = options.mobileStyle || 'panel';
 
+    // positions: below, over, aligned
+    this._selfDestruct    = options.selfDestruct || false;
+
     // openOnHover: true / false
     this._openOnHover     = options.openOnHover || false;
     if(this.$el.attr('open-on-hover') !== undefined) {
@@ -85,6 +88,11 @@
         });
       }
     },
+    unbindBaseEvents: function() {
+      this.$el.off();
+      this.$list.off();
+      this.$list.off();
+    },
     bindListEvents: function() {
       var _this = this;
       this.$choices.click( function(ev) {
@@ -95,6 +103,9 @@
         var index = $(ev.target).attr('choice-id');
         _this.setHighlightedItem( index, true );
       });
+    },
+    unbindListEvents: function() {
+      this.$choices.off();
     },
     keyHandler: function( ev ) {
       if(!this.open && (ev.which == 38 || ev.which == 40)) {
@@ -327,6 +338,19 @@ buildChoicesFromModel: function( ) {
         left: left
       });
     },
+    remove: function() {
+      this.unbindBaseEvents();
+      this.unbindListEvents();
+
+      this.$list.empty();
+
+      this.$el = null;
+      this.$display = null;
+      this.$list = null;
+      this.$choices = null;
+
+      this.choices = [];
+    },
     get value() {
       return this._value;
     },
@@ -350,6 +374,10 @@ buildChoicesFromModel: function( ) {
         this.$el.trigger('focus');
         this.layoutDropdown();
         this.setHighlightedItem( this._selectedIndex );
+      } else {
+        if( this._selfDestruct ) {
+          this.remove();
+        }
       }
     },
     get open() {
