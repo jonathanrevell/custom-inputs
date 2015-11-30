@@ -302,6 +302,31 @@ buildChoicesFromModel: function( ) {
       }
       this.positionDropdown();
     },
+    getOverflowContainer: function() {
+      var ancestor = this.$el.parent(),
+          foundOverflowContainer = false;
+
+      while (ancestor[0] !== document.body ) {
+        var parent = ancestor.parent();
+
+        if(ancestor.css('overflow') !== 'visible') {
+          foundOverflowContainer = true;
+          break;
+
+        } else if(parent && parent.length > 0) {
+          ancestor = parent;
+        } else {
+          break;
+        }
+
+      }
+
+      if(!foundOverflowContainer) {
+        ancestor = $(window);
+      }
+
+      return ancestor;
+    },
     positionDropdown: function() {
       // positions: below, over, aligned
       var baseHeight      = this.$display.outerHeight(),
@@ -311,8 +336,10 @@ buildChoicesFromModel: function( ) {
           listItemHeight  = $(this.$choices[0]).outerHeight(),
           top, left;
 
-      var windowWidth     = $(window).width(),
-          windowHeight    = $(window).height();
+      var $overflowContainer = this.getOverflowContainer();
+
+      var containerWidth     = $overflowContainer.width(),
+          containerHeight    = $overflowContainer.height();
 
       switch(this._position) {
         case "below":
@@ -326,10 +353,14 @@ buildChoicesFromModel: function( ) {
           break;
       }
 
+      var containerLeft = $overflowContainer.offset() ? $overflowContainer.offset().left : 0;
+      var containerExtent = containerLeft + containerWidth;
+
+
       var horizontalExtent = listOffset.left + listWidth;
       var leftAdjustment = 0;
-      if(horizontalExtent > windowWidth) {
-        leftAdjustment = horizontalExtent - windowWidth + 10;
+      if(horizontalExtent > containerExtent) {
+        leftAdjustment = horizontalExtent - containerExtent + 10;
       }
       left = listOffset.left - leftAdjustment;
 
