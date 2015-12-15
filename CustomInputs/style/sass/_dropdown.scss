@@ -2,7 +2,8 @@ $dd-item-padding:   5px;
 $dd-arrow-padding:  40px;
 $dd-min-width:      100px;
 
-$dropdown-selector: '*[cx-dropdown], .cx-dropdown';
+$dropdown-selector:       '*[cx-dropdown], .cx-dropdown';
+$dropdown-list-selector:  '.cx-dropdown-list';
 
 // General styling
 #{$dropdown-selector}, #{$dropdown-selector}[open] {
@@ -18,10 +19,14 @@ $dropdown-selector: '*[cx-dropdown], .cx-dropdown';
   &:not([open]) {
     display:inline-block;
 
-    ul, ol {
-      display: none;
+    > ul, > li {
+      display:none;
     }
   }
+}
+
+#{$dropdown-list-selector}:not([open]) {
+  display:none;
 }
 
 
@@ -63,44 +68,41 @@ $dropdown-selector: '*[cx-dropdown], .cx-dropdown';
 
 
 // Styling for the open state
-#{$dropdown-selector}[open] {
-  z-index:100;
+#{$dropdown-list-selector}[open] {
+  z-index:10000;
+  position:fixed;
+  display:inline-block;
+  margin:0;
+  padding:0;
+  left:0;
+  top:0;
+  background-color:white;
+  list-style:none;
+  border:solid 1px gray;
+  border-radius:1px;
+  min-width:$dd-min-width;
+  max-height:180px;
+  overflow-y:auto;
 
-  ul, ol {
-    position:absolute;
-    display:inline-block;
-    margin:0;
-    padding:0;
-    left:0;
-    top:0;
-    background-color:white;
-    list-style:none;
-    border:solid 1px gray;
-    border-radius:1px;
+  li {
+    padding:$dd-item-padding;
+    padding-right:$dd-arrow-padding;
     min-width:$dd-min-width;
-    max-height:180px;
-    overflow-y:auto;
+  }
 
-    li {
-      padding:$dd-item-padding;
-      padding-right:$dd-arrow-padding;
-      min-width:$dd-min-width;
-    }
+  li i + * {
+    margin-left:10px;
+  }
 
-    li i + * {
-      margin-left:10px;
-    }
-
-    li.highlighted {
-      background-color:lightblue;
-    }
-    li:not([selected]) {
-    }
-    li[selected] {
-      background-color:lightblue;
-      &:hover, &.highlighted {
-        background-color:darken(lightblue,20%);
-      }
+  li.highlighted {
+    background-color:lightblue;
+  }
+  li:not([selected]) {
+  }
+  li[selected] {
+    background-color:lightblue;
+    &:hover, &.highlighted {
+      background-color:darken(lightblue,20%);
     }
   }
 }
