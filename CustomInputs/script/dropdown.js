@@ -83,24 +83,27 @@
         ev.stopPropagation();
         _this.onClick();
       });
-      this.$el.blur(function(ev) {
-        if( !_this.isMouseWithinDropdown( ev )) {
-          _this.open = false;
-        }
-      });
       this.$el.on('keydown', function(ev) {
         _this.keyHandler(ev);
       });
+      this.$el.blur(function(ev) {
+        // We delay blur to allow clicks to take place first
+        setTimeout( function() {
+          _this.open = false;
+        }, 250);
+
+      });
+
+      // Any events only to be applied on hover triggered dropdowns
       if (this._openOnHover) {
         var hoverOpenTimeout = null;        // Prevents multiple opens from triggering
-        var hoverOpenLockTimeout = null;    // Places a lock on the element to prevent immediate re-open
 
         this.onMouseMove = _.throttle(function(ev) {
           if( !_this.isMouseWithinDropdown( ev )) {
             _this.open = false;
             _this.unbindOnMouseMove( ev );
           }
-        }, 100);
+        }, 50);
 
         this.unbindOnMouseMove = function() {
           $(document.body).off('mousemove', this.onMouseMove);
@@ -117,7 +120,7 @@
               _this.open = true;
               _this.bindOnMouseMove();
               hoverOpenTimeout = null;
-            }, 500);
+            }, 50);
           }
         };
         this.onListMouseLeave = function(ev) {
@@ -437,7 +440,6 @@
         top, left;
 
       var $overflowContainer = this.getOverflowContainer();
-      // console.log("Updating position of dropdown", baseOffset, $overflowContainer);
 
       var containerWidth = $overflowContainer.width(),
         containerHeight = $overflowContainer.height();
