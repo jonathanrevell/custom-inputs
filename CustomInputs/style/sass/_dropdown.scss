@@ -31,7 +31,7 @@ $dropdown-list-selector:  '.cx-dropdown-list';
 
 
 // Arrow styling
-#{$dropdown-selector}:not(.hide-arrow) {
+[cx-dropdown]:not(.hide-arrow), .cx-dropdown:not(.hide-arrow) {
   &>*:first-child {
     @include transition(background-color 0.4s);
   }

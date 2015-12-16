@@ -19,14 +19,14 @@
 }
 
 /* line 35, ../sass/_dropdown.scss */
-*[cx-dropdown] > *:first-child, .cx-dropdown:not(.hide-arrow) > *:first-child {
+[cx-dropdown]:not(.hide-arrow) > *:first-child, .cx-dropdown:not(.hide-arrow) > *:first-child {
   -moz-transition: background-color 0.4s;
   -o-transition: background-color 0.4s;
   -webkit-transition: background-color 0.4s;
   transition: background-color 0.4s;
 }
 /* line 38, ../sass/_dropdown.scss */
-*[cx-dropdown]:not([open]) > *:first-child:after, .cx-dropdown:not(.hide-arrow):not([open]) > *:first-child:after {
+[cx-dropdown]:not(.hide-arrow):not([open]) > *:first-child:after, .cx-dropdown:not(.hide-arrow):not([open]) > *:first-child:after {
   width: 0;
   height: 0;
   content: ' ';
@@ -43,7 +43,7 @@
   transform: translateY(-50%);
 }
 /* line 45, ../sass/_dropdown.scss */
-*[cx-dropdown][open] > *:first-child:after, .cx-dropdown:not(.hide-arrow)[open] > *:first-child:after {
+[cx-dropdown]:not(.hide-arrow)[open] > *:first-child:after, .cx-dropdown:not(.hide-arrow)[open] > *:first-child:after {
   width: 0;
   height: 0;
   content: ' ';

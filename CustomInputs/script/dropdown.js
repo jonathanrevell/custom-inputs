@@ -84,25 +84,38 @@
         _this.onClick();
       });
       this.$el.blur(function(ev) {
-
-        // Use a timeout to ensure that any click events
-        // on the list can get called.
-        // TODO: Make this smarter. Actually detect why blur is happening.
-        setTimeout(function() {
+        if( !_this.isMouseWithinDropdown( ev )) {
           _this.open = false;
-        }, 200);
-
+        }
       });
       this.$el.on('keydown', function(ev) {
         _this.keyHandler(ev);
       });
       if (this._openOnHover) {
-        var hoverOpenTimeout = null;
+        var hoverOpenTimeout = null;        // Prevents multiple opens from triggering
+        var hoverOpenLockTimeout = null;    // Places a lock on the element to prevent immediate re-open
+
+        this.onMouseMove = _.throttle(function(ev) {
+          if( !_this.isMouseWithinDropdown( ev )) {
+            _this.open = false;
+            _this.unbindOnMouseMove( ev );
+          }
+        }, 100);
+
+        this.unbindOnMouseMove = function() {
+          $(document.body).off('mousemove', this.onMouseMove);
+        };
+
+        this.bindOnMouseMove = function() {
+          $(document.body).on('mousemove', this.onMouseMove);
+        };
 
         this.onListMouseEnter = function(ev) {
-          if (!hoverOpenTimeout) {
+          if (!hoverOpenTimeout && !_this.open) {
             hoverOpenTimeout = setTimeout(function() {
+              console.log("Mouse enter", ev);
               _this.open = true;
+              _this.bindOnMouseMove();
               hoverOpenTimeout = null;
             }, 500);
           }
@@ -112,7 +125,13 @@
             clearTimeout(hoverOpenTimeout);
             hoverOpenTimeout = null;
           }
-          _this.open = false;
+          if(_this.open) {
+            console.log("Mouse leave");
+            if( !_this.isMouseWithinDropdown( ev )) {
+              console.log("Not within dropdown. Close now.");
+              _this.open = false;
+            }
+          }
         };
 
         this.$el.on('mouseenter', this.onListMouseEnter);
@@ -126,7 +145,9 @@
       if(this.$list) {
         this.$list.off();
       }
-
+      if(this.onMouseMove) {
+        this.unbindOnMouseMove();
+      }
     },
     bindListEvents: function() {
       var _this = this;
@@ -138,11 +159,27 @@
         var index = $(ev.target).attr('choice-id');
         _this.setHighlightedItem(index, true);
       });
+
+      if(this.onListMouseLeave) {
+        this.$list.on('mouseenter', this.onListMouseEnter);
+        this.$list.on('mouseleave', this.onListMouseLeave);
+      }
     },
     unbindListEvents: function() {
       if(this.$choices) {
         this.$choices.off();
       }
+    },
+    isMouseWithinDropdown: function( ev ) {
+      var cursor = {
+        left: ev.pageX,
+        top: ev.pageY
+      };
+
+      var withinList = ScreenGeometry.isPositionWithinElement( cursor, this.$list );
+      var withinBase = ScreenGeometry.isPositionWithinElement( cursor, this.$el );
+
+      return (withinBase || withinList);
     },
     keyHandler: function(ev) {
       if (!this.open && (ev.which == 38 || ev.which == 40)) {
@@ -468,6 +505,7 @@
       }
     },
     set open(val) {
+      console.log("Toggling open state to: " + val);
       if(this.$el) {
         this.$el.attr('open', val);
       }
@@ -476,15 +514,18 @@
         this.$el.trigger('focus');
         this.layoutDropdown();
         this.setHighlightedItem(this._selectedIndex);
+        this.$list.attr('open', val);
       } else {
+        this.$list.attr('open', val);
         if (this._selfDestruct) {
           this.remove();
         }
       }
 
-      if(this.$list) {
-        this.$list.attr('open', val);
-      }
+      // if(this.$list) {
+      //   console.log("Setting open attribute on list to: " + val);
+      //
+      // }
     },
     get open() {
       return this._open;
