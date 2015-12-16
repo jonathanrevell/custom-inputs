@@ -113,7 +113,7 @@
         this.onListMouseEnter = function(ev) {
           if (!hoverOpenTimeout && !_this.open) {
             hoverOpenTimeout = setTimeout(function() {
-              console.log("Mouse enter", ev);
+
               _this.open = true;
               _this.bindOnMouseMove();
               hoverOpenTimeout = null;
@@ -126,9 +126,9 @@
             hoverOpenTimeout = null;
           }
           if(_this.open) {
-            console.log("Mouse leave");
+
             if( !_this.isMouseWithinDropdown( ev )) {
-              console.log("Not within dropdown. Close now.");
+
               _this.open = false;
             }
           }
@@ -343,7 +343,6 @@
       });
     },
     onClick: _.throttle(function() {
-      console.log(this.$display[0].outerHTML);
       this.open = !this.open;
 
       this.onClick.cancel();
@@ -372,7 +371,7 @@
       var choice = this.choices[idx];
 
       if (this._isMenu) {
-        console.log("Menu item clicked");
+
         if (this._onSelectEvent) {
           this._onSelectEvent({
             index: idx,
@@ -505,7 +504,6 @@
       }
     },
     set open(val) {
-      console.log("Toggling open state to: " + val);
       if(this.$el) {
         this.$el.attr('open', val);
       }
@@ -521,11 +519,6 @@
           this.remove();
         }
       }
-
-      // if(this.$list) {
-      //   console.log("Setting open attribute on list to: " + val);
-      //
-      // }
     },
     get open() {
       return this._open;
