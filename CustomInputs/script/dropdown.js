@@ -90,8 +90,7 @@
         // We delay blur to allow clicks to take place first
         setTimeout( function() {
           _this.open = false;
-        }, 250);
-
+        }, 150);
       });
 
       // Any events only to be applied on hover triggered dropdowns
