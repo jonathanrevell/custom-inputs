@@ -402,7 +402,6 @@
       } else {
         this.$el.removeClass('cx-mobile-panel');
       }
-      this.positionDropdown();
     },
     getOverflowContainer: function() {
       var ancestor = this.$el.parent(),
@@ -434,7 +433,6 @@
       var baseHeight = this.$display.outerHeight(),
         baseOffset = this.$el.offset(),
         listOffset = this.$list.offset(),
-        listWidth = this.$list.width(),
         listItemHeight = $(this.$choices[0]).outerHeight(),
         top, left;
 
@@ -459,17 +457,54 @@
       // var containerExtent = containerLeft + containerWidth;
       //
       //
-      // var horizontalExtent = listOffset.left + listWidth;
+      // var horizontalExtent = baseOffset.left + listWidth;
       // var leftAdjustment = 0;
       // if (horizontalExtent > containerExtent) {
-      //   leftAdjustment = horizontalExtent - containerExtent + 10;
+      //   leftAdjustment = horizontalExtent - containerExtent;
       // }
-      // left = baseOffset.left - leftAdjustment;
-      left = baseOffset.left;
+      left = baseOffset.left - this.getLeftAdjustment( baseOffset, $overflowContainer);
+      top  = top - this.getTopAdjustment( baseOffset, $overflowContainer);
+      // left = baseOffset.left;
 
       this.$list.css('position', 'fixed');
       this.$list.css('left', left);
       this.$list.css('top', top);
+    },
+    getLeftAdjustment: function( baseOffset, $overflowContainer) {
+      var listWidth       = this.$list.width();
+
+      var containerWidth  = $overflowContainer.outerWidth(),
+          containerHeight = $overflowContainer.outerHeight();
+
+      var containerLeft   = $overflowContainer.offset() ? $overflowContainer.offset().left : 0;
+      var containerExtent = containerLeft + containerWidth;
+
+
+      var horizontalExtent = baseOffset.left + listWidth;
+      var leftAdjustment = 0;
+      if (horizontalExtent > containerExtent) {
+        leftAdjustment = (horizontalExtent - containerExtent) + 10;
+      }
+      console.log("leftAdjustment: " + leftAdjustment);
+      return leftAdjustment;
+    },
+    getTopAdjustment: function( baseOffset, $overflowContainer) {
+      var listHeight       = this.$list.height();
+
+      var containerWidth  = $overflowContainer.outerWidth(),
+          containerHeight = $overflowContainer.outerHeight();
+
+      var containerTop   = $overflowContainer.offset() ? $overflowContainer.offset().top : 0;
+      var containerExtent = containerTop + containerHeight;
+
+
+      var verticalExtent = baseOffset.top + listHeight;
+      var topAdjustment = 0;
+      if (verticalExtent > containerExtent) {
+        topAdjustment = (verticalExtent - containerExtent) + 10;
+      }
+      console.log("topAdjustment: " + topAdjustment);
+      return topAdjustment;
     },
     remove: function() {
       this.unbindBaseEvents();
@@ -511,9 +546,12 @@
       this._open = val;
       if (val) {
         this.$el.trigger('focus');
-        this.layoutDropdown();
+
+        this.layoutDropdown();          // Build the dropdown list
+        this.$list.attr('open', val);   // Set the list to open in the DOM
+        this.positionDropdown();        // Position the dropdown now that layout is correct
+
         this.setHighlightedItem(this._selectedIndex);
-        this.$list.attr('open', val);
       } else {
         this.$list.attr('open', val);
         if (this._selfDestruct) {
