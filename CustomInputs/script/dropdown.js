@@ -1,5 +1,8 @@
 (function(exports) {
 
+  DROPDOWN_ZINDEX_SHIFT = 1000;     //  How much the dropdown will be pushed above elements with valid z-indexes
+  DROPDOWN_DEFAULT_ZINDEX = 10000;  //  How far the dropdown will be placed by default when no z-index can be determined
+
   var Dropdown = function(el, options) {
     options = options || {};
     this.$el = $(el);
@@ -274,7 +277,15 @@
       return index;
     },
     setupBaseDOM: function(options) {
-      this.$display = this.$el.find('>:first-child');
+      var $display = this.$el.find('>:first-child');
+      var childCount = this.$el.children().length;
+      var tagIsList = ($display.prop("tagName") == "UL" || $display.prop("tagName") == "OL");
+
+      // If no valid display element is defined, just use the base element
+      if(childCount === 0 || (childCount == 1 && tagIsList)) {
+        $display = this.$el;
+      }
+      this.$display = $display;
       this.makeFocusable();
     },
     setupListDOM: function(options) {
@@ -391,6 +402,17 @@
         $(this.$choices[idx]).attr('selected', true);
       }
     },
+    setListZIndex: function() {
+      // Get the origin z-index
+      var originZ = this.$list.css('z-index');
+
+      // Set the z-index to 100 over
+      if(originZ) {
+        this.$list.css('z-index', parseInt(originZ) + DROPDOWN_ZINDEX_SHIFT);
+      } else {
+        this.$list.css('z-index', DROPDOWN_DEFAULT_ZINDEX);
+      }
+    },
     layoutDropdown: function() {
       if (!this.$list) {
         this.setupListDOM();
@@ -453,18 +475,8 @@
           break;
       }
 
-      // var containerLeft = $overflowContainer.offset() ? $overflowContainer.offset().left : 0;
-      // var containerExtent = containerLeft + containerWidth;
-      //
-      //
-      // var horizontalExtent = baseOffset.left + listWidth;
-      // var leftAdjustment = 0;
-      // if (horizontalExtent > containerExtent) {
-      //   leftAdjustment = horizontalExtent - containerExtent;
-      // }
       left = baseOffset.left - this.getLeftAdjustment( baseOffset, $overflowContainer);
       top  = top - this.getTopAdjustment( baseOffset, $overflowContainer);
-      // left = baseOffset.left;
 
       this.$list.css('position', 'fixed');
       this.$list.css('left', left);
@@ -485,7 +497,6 @@
       if (horizontalExtent > containerExtent) {
         leftAdjustment = (horizontalExtent - containerExtent) + 10;
       }
-      console.log("leftAdjustment: " + leftAdjustment);
       return leftAdjustment;
     },
     getTopAdjustment: function( baseOffset, $overflowContainer) {
@@ -503,7 +514,6 @@
       if (verticalExtent > containerExtent) {
         topAdjustment = (verticalExtent - containerExtent) + 10;
       }
-      console.log("topAdjustment: " + topAdjustment);
       return topAdjustment;
     },
     remove: function() {
@@ -550,6 +560,7 @@
         this.layoutDropdown();          // Build the dropdown list
         this.$list.attr('open', val);   // Set the list to open in the DOM
         this.positionDropdown();        // Position the dropdown now that layout is correct
+        this.setListZIndex();
 
         this.setHighlightedItem(this._selectedIndex);
       } else {
